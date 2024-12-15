@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>За Йоаннка</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe6e6;
+            text-align: center;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #d63384;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #d63384;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background-color: #a02660;
+        }
+        .correct {
+            animation: correctFlash 0.5s;
+        }
+        .incorrect {
+            animation: incorrectFlash 0.5s;
+        }
+        @keyframes correctFlash {
+            0% { background-color: #d63384; }
+            50% { background-color: #28a745; }
+            100% { background-color: #d63384; }
+        }
+        @keyframes incorrectFlash {
+            0% { background-color: #d63384; }
+            50% { background-color: #dc3545; }
+            100% { background-color: #d63384; }
+        }
+        .heart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .heart-shape {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            background-color: #d63384;
+            transform: rotate(-45deg);
+            animation: heartbeat 1s infinite;
+        }
+        .heart-shape::before,
+        .heart-shape::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: #d63384;
+            border-radius: 50%;
+        }
+        .heart-shape::before {
+            top: -60px;
+            left: 0;
+        }
+        .heart-shape::after {
+            top: 0;
+            left: 60px;
+        }
+        .heart-text {
+            position: absolute;
+            color: #fff;
+            font-size: 1.2rem;
+            transform: rotate(45deg);
+            text-align: center;
+            width: 100%;
+            top: 40%;
+        }
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1) rotate(-45deg); }
+            50% { transform: scale(1.2) rotate(-45deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="game">
+        <h1>Добре дошла, Йоаннче!</h1>
+        <p id="question">Готова ли си за романтичното предизвикателство?</p>
+        <div id="answers">
+            <button class="button" onclick="checkAnswer(0)">Започни!</button>
+        </div>
+    </div>
+
+    <script>
+            const questions = [
+            { text: "Коя е любимият ми десерт?", answers: ["Крем карамел", "Бисквитена торта", "Палачинка с шоколад"], correct: 0 },
+            { text: "Какъв е цветът на очите ми?", answers: ["Сини", "Кафяви", "Зелени"], correct: 1 },
+            { text: "Кое е любимото ми нещо в теб?", answers: ["Очите", "Усмивката", "Тялото"], correct: 1 },
+            { text: "Как обичам да те наричам най-много?", answers: ["Любов", "Жена ми", "Принцесо"], correct: 2},
+            { text: "Кое нещо обичам да казваш най-много?", answers: ["Обичам те", "Не знам", "Само товя съм"], correct: 1},
+            { text: "Кое е първото нещо, което ще направя когато те видя?", answers: ["Ще те целуна", "Ще те галя по главичката", "Ще те прегърна"], correct: 2},
+            { text: "На коя дата съм роден?", answers: ["2 май", "11 май", "2 юни"], correct: 0},
+            { text: "Какво обичам да правя през свободното си време", answers: ["Да играя игри", "Да ти обръщам внимание", "Да излзлизам", "Да слушам музика"], correct: 1},
+        
+        ];
+
+
+        let currentQuestion = 0;
+
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const answersElement = document.getElementById('answers');
+
+            if (currentQuestion < questions.length) {
+                const question = questions[currentQuestion];
+                questionElement.textContent = question.text;
+                answersElement.innerHTML = '';
+                question.answers.forEach((answer, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = answer;
+                    button.className = 'button';
+                    button.onclick = () => checkAnswer(index, button);
+                    answersElement.appendChild(button);
+                });
+            } else {
+                showLoveMessage();
+            }
+        }
+
+        function checkAnswer(answerIndex, button) {
+            if (answerIndex === questions[currentQuestion].correct) {
+                button.classList.add('correct');
+                setTimeout(() => {
+                    currentQuestion++;
+                    loadQuestion();
+                }, 500);
+            } else {
+                button.classList.add('incorrect');
+                setTimeout(() => {
+                    button.classList.remove('incorrect');
+                }, 500);
+                alert("Опитай отново, любов моя!");
+            }
+        }
+
+        function showLoveMessage() {
+            const gameElement = document.getElementById('game');
+            gameElement.innerHTML = `
+                <h1>Ти си най-прекрасната, Йоаннче!</h1>
+                <p>Моя сладка принцесо Йоаннка,
+
+Всеки ден с теб е като подарък, който не съм си и мечтал да получа. Ти си слънцето, което озарява живота ми, и топлината, която усещам дори в най-студените дни. Очите ти – тези вълшебни кафяви очи – са като огледало на всичко красиво в този свят.
+Ти не си просто моята любов, ти си моето вдъхновение, моят дом и най-скъпата част от сърцето ми. С всяка усмивка ти караш времето да спре, а с всеки твой поглед усещам, че никъде няма по-прекрасно място от това да бъда до теб.
+Искам да ти благодаря – за любовта, която ми даваш, за това, че си такава невероятна, грижовна и добра. Всяка минута с теб е безценна, а мисълта за теб ме кара да вярвам, че всичко е възможно.
+Обичам те повече, отколкото могат да изразят думите. Ти си моето всичко, и ще направя всичко, за да бъда човекът, който заслужаваш. Никога няма да спра да ти го доказвам.
+Завинаги твой, твоят мъж❤️</p>
+            
+            `;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
